@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">感測紀錄器</string>
+    <string name="save_start">開始記錄</string>
+    <string name="save_end">結束記錄</string>
+    <string name="data_setting">［數據設定］</string>
+    <string name="other_setting">［其他設定］</string>
+    <string name="other_setting_filename">檔案名稱</string>
+    <string name="other_setting_type">類型標記</string>
+    <string name="other_setting_frequency">儲存頻率</string>
+    <string name="other_setting_timestamp">時間戳記</string>
+    <string name="other_setting_network">網路儲存</string>
+    <string name="save_Accelerometer">紀錄 Accelerometer（加速規）</string>
+    <string name="save_Gyroscope">紀錄 Gyroscope（陀螺儀）</string>
+    <string name="save_Orientation">紀錄 Orientation（方向）</string>
+    <string name="save_Magnetic_Field">紀錄 Magnetic Field（磁場）</string>
+    <string name="save_Touch_Timestamp">紀錄 Touch Timestamp（觸控時間戳）</string>
+</resources>

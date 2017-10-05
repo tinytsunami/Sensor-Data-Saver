@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tinytsunami.myapplication.MainActivity">
+
+    <TextView
+        android:id="@+id/StaticLabel1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:singleLine="false"
+        android:text="@string/data_setting"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/StaticLabel2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:singleLine="false"
+        android:text="@string/other_setting"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="159dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/StaticLabel1"
+        app:layout_constraintHorizontal_bias="0.0">
+
+        <CheckBox
+            android:id="@+id/CheckBoxAccelerometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/save_Accelerometer" />
+
+        <CheckBox
+            android:id="@+id/CheckBoxGyroscope"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/save_Gyroscope" />
+
+        <CheckBox
+            android:id="@+id/CheckBoxOrientation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/save_Orientation" />
+
+        <CheckBox
+            android:id="@+id/CheckBoxMagneticField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/save_Magnetic_Field" />
+
+        <CheckBox
+            android:id="@+id/CheckBoxTouchTimestamp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/save_Touch_Timestamp" />
+
+    </LinearLayout>
+
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_height="253dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/StaticLabel2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <TextView
+                android:id="@+id/StaticLabel3"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_span="1"
+                android:layout_weight="1"
+                android:text="@string/other_setting_filename"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                tools:text="檔案名稱" />
+
+            <TextView
+                android:id="@+id/TextViewFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_margin="4dp"
+                android:layout_span="2"
+                android:layout_weight="5"
+                android:text="未產生"
+                android:textSize="18sp"
+                tools:text="20170110_100300.txt" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/StaticLabel4"
+                android:layout_height="22dp"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_marginBottom="11dp"
+                android:layout_marginTop="10dp"
+                android:layout_span="1"
+                android:layout_weight="1"
+                android:text="@string/other_setting_type"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:id="@+id/SpinnerFileTag"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_margin="4dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_span="2"
+                android:layout_weight="5" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/StaticLabel5"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="@string/other_setting_frequency"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <SeekBar
+                android:id="@+id/SeekBarFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="2"
+                android:layout_margin="4dp"
+                android:layout_weight="5"
+                android:max="1000"
+                android:min="1"
+                android:progress="200"
+                app:layout_constraintLeft_toLeftOf="parent"
+                tools:layout_editor_absoluteY="298dp" />
+
+            <TextView
+                android:id="@+id/TextViewFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="3"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="0200ms"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toRightOf="@+id/SeekBarFrequency"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="320dp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <TextView
+                android:id="@+id/StaticLabel6"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="@string/other_setting_timestamp"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/TextViewTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="2"
+                android:layout_margin="4dp"
+                android:layout_span="2"
+                android:layout_weight="5"
+                android:text="00:00:00"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:layout_editor_absoluteY="332dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/StaticLabel7"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:text="@string/other_setting_network"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_span="2"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/CheckBoxNetworkUsed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_column="2"
+                    android:layout_margin="4dp"
+                    android:layout_span="2"
+                    android:layout_weight="5"
+                    android:text="使用網路儲存" />
+
+                <EditText
+                    android:id="@+id/EditTextNetworkAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:text="127.0.0.1"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/ButtonSaveStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginTop="4dp"
+                android:layout_weight="3"
+                android:elevation="0dp"
+                android:text="@string/save_start"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TextViewTimestamp" />
+
+            <Button
+                android:id="@+id/ButtonSaveEnd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_marginTop="4dp"
+                android:layout_weight="3"
+                android:elevation="0dp"
+                android:enabled="false"
+                android:text="@string/save_end"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ButtonSaveStart" />
+
+        </TableRow>
+
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>
