@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tinytsunami.myapplication">
+    package="com.example.tinytsunami.sensorsaver">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -19,5 +19,4 @@
         </activity>
     </application>
 
-    <service android:name="MainService"></service>
 </manifest>

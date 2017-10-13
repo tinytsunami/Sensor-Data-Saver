@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tinytsunami.myapplication.MainActivity">
+    tools:context="com.example.tinytsunami.sensorsaver.MainActivity">
+
 
     <TextView
         android:id="@+id/StaticLabel1"
@@ -89,7 +90,8 @@
             android:id="@+id/CheckBoxTouchTimestamp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
+            android:enabled="false"
             android:text="@string/save_Touch_Timestamp" />
 
     </LinearLayout>
@@ -189,24 +191,11 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
-            <SeekBar
-                android:id="@+id/SeekBarFrequency"
-                android:layout_width="wrap_content"
-                android:layout_height="22dp"
-                android:layout_column="2"
-                android:layout_margin="4dp"
-                android:layout_weight="5"
-                android:max="1000"
-                android:min="1"
-                android:progress="200"
-                app:layout_constraintLeft_toLeftOf="parent"
-                tools:layout_editor_absoluteY="298dp" />
-
             <TextView
                 android:id="@+id/TextViewFrequency"
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
-                android:layout_column="3"
+                android:layout_column="2"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:text="0200ms"
@@ -216,6 +205,19 @@
                 app:layout_constraintLeft_toRightOf="@+id/SeekBarFrequency"
                 app:layout_constraintRight_toRightOf="parent"
                 tools:layout_editor_absoluteY="320dp" />
+
+            <SeekBar
+                android:id="@+id/SeekBarFrequency"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_column="3"
+                android:layout_margin="4dp"
+                android:layout_weight="4"
+                android:max="1000"
+                android:min="1"
+                android:progress="200"
+                app:layout_constraintLeft_toLeftOf="parent"
+                tools:layout_editor_absoluteY="298dp" />
 
         </TableRow>
 
@@ -261,42 +263,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:layout_column="1"
-                android:layout_margin="4dp"
                 android:layout_weight="1"
                 android:text="@string/other_setting_network"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp" />
 
-            <LinearLayout
+            <CheckBox
+                android:id="@+id/CheckBoxNetworkUsed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
-                android:layout_span="2"
-                android:layout_weight="5"
-                android:orientation="vertical">
+                android:layout_span="1"
+                android:layout_weight="1"
+                android:text="網路" />
 
-                <CheckBox
-                    android:id="@+id/CheckBoxNetworkUsed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_column="2"
-                    android:layout_margin="4dp"
-                    android:layout_span="2"
-                    android:layout_weight="5"
-                    android:text="使用網路儲存" />
-
-                <EditText
-                    android:id="@+id/EditTextNetworkAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:ems="10"
-                    android:inputType="textPersonName"
-                    android:text="127.0.0.1"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
+            <EditText
+                android:id="@+id/EditTextNetworkAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="3"
+                android:layout_span="1"
+                android:layout_weight="4"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="127.0.0.1"
+                android:textSize="18sp" />
 
         </TableRow>
 

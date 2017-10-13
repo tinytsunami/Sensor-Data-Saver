@@ -14,4 +14,12 @@
     <string name="save_Orientation">紀錄 Orientation（方向）</string>
     <string name="save_Magnetic_Field">紀錄 Magnetic Field（磁場）</string>
     <string name="save_Touch_Timestamp">紀錄 Touch Timestamp（觸控時間戳）</string>
+    <string-array name="file_tags">
+        <item>Stationary</item>
+        <item>Walk</item>
+        <item>MRT</item>
+        <item>Bus</item>
+        <item>Train</item>
+        <item>Scooter</item>
+    </string-array>
 </resources>

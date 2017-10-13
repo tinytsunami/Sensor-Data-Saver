@@ -1,21 +1,26 @@
-package com.example.tinytsunami.myapplication;
+package com.example.tinytsunami.sensorsaver;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -42,13 +47,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     // Other-Setting UI
     //========================================================
     private TextView TextViewFilename;
-    private Spinner  SpinnerFileTag;
+    private Spinner SpinnerFileTag;
     private SeekBar  SeekBarFrequency;
     private TextView TextViewFrequency;
     private TextView TextViewTimestamp;
     private CheckBox CheckBoxNetworkUsed;
     private EditText EditTextNetworkAddress;
-    private Button   ButtonSaveStart;
+    private Button ButtonSaveStart;
     private Button   ButtonSaveEnd;
 
     // Used for show timestamp UI
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String data;            // Data of save-file
     private String timestamp;       // Timestamp of save-file
     private String networkAddress;  // Address for using network
+    private String fileTag;         // Used for filename
 
     //========================================================
     // Data Used
@@ -75,8 +81,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //========================================================
     // System Controller
     //========================================================
+    private Resources resources;         // System Resources
     private SensorManager sensorManager; // Used for sensor
-    private Calendar      calender;      // Used for timer
+    private Calendar calender;           // Used for timer
 
     //========================================================
     // File Controller
@@ -108,15 +115,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //========================================================
     protected void processPermission()
     {
-        String permissionType = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-        int permissionCheck = ContextCompat.checkSelfPermission(this, permissionType);
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED)
+        String[] permissions = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        };
+
+        for(String permission : permissions)
         {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{permissionType}, 1);
-        }
-        else
-        {
-            Toast.makeText(this, "已取得權限", Toast.LENGTH_SHORT).show();
+            int check = ContextCompat.checkSelfPermission(this, permission);
+            if (check != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{permission}, 1);
+            else
+                Toast.makeText(this, "已取得權限", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -152,17 +161,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //========================================================
     protected String getFilename()
     {
-        return String.format("%s.txt", getTimestamp()).replace(":", "");
+        return String.format("%s%s.txt", fileTag.substring(0, 2).toUpperCase(), getTimestamp()).replace(":", "");
     }
 
     //========================================================
     // Create File Stream
     //========================================================
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected void createFileStream(String filename)
     {
         try {
-            String path = Environment.getExternalStorageDirectory().getAbsolutePath();
-            fileStream = new FileOutputStream(new File(path + File.separator + filename));
+            if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
+            {
+                File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                if (!sdCard.exists()) sdCard.mkdirs();
+                fileStream = new FileOutputStream(new File(sdCard, filename));
+            }
+            else
+                Toast.makeText(this, "SD卡讀取失敗", Toast.LENGTH_SHORT).show();
         } catch (Exception  e) {
             Log.d("Exception", e.getMessage());
         }
@@ -215,14 +231,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         return tmp;
     }
 
+    //========================================================
+    // Create Spinner
+    //========================================================
+    private void createSpinner()
+    {
+        final String[] items = resources.getStringArray(R.array.file_tags);
+        ArrayAdapter<String> fileTagList = new ArrayAdapter<>(MainActivity.this,
+                android.R.layout.simple_spinner_dropdown_item,
+                items);
+        SpinnerFileTag.setAdapter(fileTagList);
+        SpinnerFileTag.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                fileTag = items[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Pre-process
+        resources = getResources();
         this.processPermission();
         this.getUIObject();
+        this.createSpinner();
 
         // To set onchange function
         SeekBarFrequency.setOnSeekBarChangeListener(this);
@@ -238,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Timer for Start Save-file
         ButtonSaveStart.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
                 // Process file
                 filename = getFilename();
@@ -265,8 +305,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 saveHandler.removeCallbacks(saveRunnable);
             }
         });
-
-        startService(new Intent(MainActivity.this, MainService.class));
     }
 
     @Override
@@ -284,7 +322,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager.unregisterListener(this);
         this.removeFileStream();
         super.onStop();
-        stopService(new Intent(MainActivity.this, MainService.class));
     }
 
     @Override

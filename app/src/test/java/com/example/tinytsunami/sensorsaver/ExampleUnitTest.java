@@ -1,4 +1,4 @@
-package com.example.tinytsunami.myapplication;
+package com.example.tinytsunami.sensorsaver;
 
 import org.junit.Test;
 
