@@ -7,98 +7,9 @@
     tools:context="com.example.tinytsunami.sensorsaver.MainActivity">
 
 
-    <TextView
-        android:id="@+id/StaticLabel1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:singleLine="false"
-        android:text="@string/data_setting"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/StaticLabel2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:singleLine="false"
-        android:text="@string/other_setting"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="159dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/StaticLabel1"
-        app:layout_constraintHorizontal_bias="0.0">
-
-        <CheckBox
-            android:id="@+id/CheckBoxAccelerometer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/save_Accelerometer" />
-
-        <CheckBox
-            android:id="@+id/CheckBoxGyroscope"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/save_Gyroscope" />
-
-        <CheckBox
-            android:id="@+id/CheckBoxOrientation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/save_Orientation" />
-
-        <CheckBox
-            android:id="@+id/CheckBoxMagneticField"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/save_Magnetic_Field" />
-
-        <CheckBox
-            android:id="@+id/CheckBoxTouchTimestamp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:enabled="false"
-            android:text="@string/save_Touch_Timestamp" />
-
-    </LinearLayout>
-
     <TableLayout
         android:layout_width="0dp"
-        android:layout_height="253dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -108,8 +19,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StaticLabel2"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TableRow
             android:layout_width="match_parent"
@@ -274,8 +184,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_column="2"
+                android:layout_margin="0dp"
                 android:layout_span="1"
-                android:layout_weight="1"
+                android:layout_weight="3"
+                android:checked="false"
                 android:text="網路" />
 
             <EditText
@@ -284,11 +196,41 @@
                 android:layout_height="wrap_content"
                 android:layout_column="3"
                 android:layout_span="1"
-                android:layout_weight="4"
+                android:layout_weight="2"
                 android:ems="10"
+                android:hint="address"
                 android:inputType="textPersonName"
-                android:text="127.0.0.1"
                 android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/EditTextNetworkAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_margin="4dp"
+                android:layout_span="3"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="user"
+                android:inputType="textPersonName"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/EditTextNetworkPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_span="1"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="password"
+                android:inputType="textPassword" />
 
         </TableRow>
 
@@ -323,6 +265,20 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ButtonSaveStart" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_column="1"
+                android:layout_span="4"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/keyboard" />
         </TableRow>
 
     </TableLayout>

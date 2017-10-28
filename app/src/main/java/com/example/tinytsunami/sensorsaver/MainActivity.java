@@ -2,7 +2,6 @@ package com.example.tinytsunami.sensorsaver;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.hardware.Sensor;
@@ -18,6 +17,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,31 +30,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, SeekBar.OnSeekBarChangeListener {
     //========================================================
-    // Data-Setting UI
-    //========================================================
-    private CheckBox CheckBoxAccelerometer;
-    private CheckBox CheckBoxGyroscope;
-    private CheckBox CheckBoxOrientation;
-    private CheckBox CheckBoxMagneticField;
-    private CheckBox CheckBoxTouchTimestamp;
-
-    //========================================================
     // Other-Setting UI
     //========================================================
     private TextView TextViewFilename;
-    private Spinner SpinnerFileTag;
+    private Spinner  SpinnerFileTag;
     private SeekBar  SeekBarFrequency;
     private TextView TextViewFrequency;
     private TextView TextViewTimestamp;
     private CheckBox CheckBoxNetworkUsed;
     private EditText EditTextNetworkAddress;
-    private Button ButtonSaveStart;
+    private EditText EditTextNetworkAccount;
+    private EditText EditTextNetworkPassword;
+    private Button   ButtonSaveStart;
     private Button   ButtonSaveEnd;
 
     // Used for show timestamp UI
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float[] gyroscope;      // Same as above
     private float[] magneticField;  // Same as above
     private float[] orientation;    // Same as above
-    private float[] touchTimestamp; // Include timestamp of down, up
 
     //========================================================
     // System Controller
@@ -134,14 +136,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     //========================================================
     protected void getUIObject()
     {
-        // Data setting
-        CheckBoxAccelerometer = (CheckBox) findViewById(R.id.CheckBoxAccelerometer);
-        CheckBoxGyroscope = (CheckBox) findViewById(R.id.CheckBoxGyroscope);
-        CheckBoxOrientation = (CheckBox) findViewById(R.id.CheckBoxOrientation);
-        CheckBoxMagneticField = (CheckBox) findViewById(R.id.CheckBoxMagneticField);
-        CheckBoxTouchTimestamp = (CheckBox) findViewById(R.id.CheckBoxTouchTimestamp);
-
-        // Other setting
         TextViewFilename = (TextView) findViewById(R.id.TextViewFilename);
         SpinnerFileTag = (Spinner) findViewById(R.id.SpinnerFileTag);
         SeekBarFrequency = (SeekBar) findViewById(R.id.SeekBarFrequency);
@@ -149,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         TextViewTimestamp = (TextView) findViewById(R.id.TextViewTimestamp);
         CheckBoxNetworkUsed = (CheckBox) findViewById(R.id.CheckBoxNetworkUsed);
         EditTextNetworkAddress = (EditText) findViewById(R.id.EditTextNetworkAddress);
+        EditTextNetworkAccount = (EditText) findViewById(R.id.EditTextNetworkAccount);
+        EditTextNetworkPassword = (EditText) findViewById(R.id.EditTextNetworkPassword);
         ButtonSaveStart = (Button) findViewById(R.id.ButtonSaveStart);
         ButtonSaveEnd = (Button) findViewById(R.id.ButtonSaveEnd);
 
@@ -165,23 +161,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     //========================================================
-    // Create File Stream
+    // Create File
     //========================================================
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    protected void createFileStream(String filename)
+    protected File createFile(String filename)
     {
         try {
             if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
             {
                 File sdCard = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
                 if (!sdCard.exists()) sdCard.mkdirs();
-                fileStream = new FileOutputStream(new File(sdCard, filename));
+                return (new File(sdCard, filename));
             }
             else
                 Toast.makeText(this, "SD卡讀取失敗", Toast.LENGTH_SHORT).show();
         } catch (Exception  e) {
             Log.d("Exception", e.getMessage());
         }
+        return null;
+    }
+
+    //========================================================
+    // Create File Stream
+    //========================================================
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    protected void createFileStream(String filename) throws FileNotFoundException {
+        fileStream = new FileOutputStream(this.createFile(filename));
     }
 
     //========================================================
@@ -215,19 +220,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private String createData(String timestamp)
     {
         String tmp = timestamp + ", ";
-        if(CheckBoxAccelerometer.isChecked() && accelerometer != null)
-            tmp += String.format("%.6f, %.6f, %.6f, ", accelerometer[0], accelerometer[1], accelerometer[2]);
-        if(CheckBoxGyroscope.isChecked() && gyroscope != null)
-            tmp += String.format("%.6f, %.6f, %.6f, ", gyroscope[0], gyroscope[1], gyroscope[2]);
-        if(CheckBoxOrientation.isChecked() && orientation != null)
-            tmp += String.format("%.6f, %.6f, %.6f, ", orientation[0], orientation[1], orientation[2]);
-        if(CheckBoxMagneticField.isChecked() && magneticField != null)
-            tmp += String.format("%.6f, %.6f, %.6f, ", magneticField[0], magneticField[1], magneticField[2]);
-        if(CheckBoxTouchTimestamp.isChecked())
-        {
-            //pass
-        }
-        tmp = (tmp + "\n").replace(", \n", "\n");
+        tmp += String.format("%.6f, %.6f, %.6f, ", accelerometer[0], accelerometer[1], accelerometer[2]);
+        tmp += String.format("%.6f, %.6f, %.6f, ", gyroscope[0], gyroscope[1], gyroscope[2]);
+        tmp += String.format("%.6f, %.6f, %.6f, ", orientation[0], orientation[1], orientation[2]);
+        tmp += String.format("%.6f, %.6f, %.6f\n", magneticField[0], magneticField[1], magneticField[2]);
         return tmp;
     }
 
@@ -250,6 +246,53 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    //========================================================
+    // send FTP
+    //========================================================
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    void ftpSend(String filename) throws IOException {
+        //init.
+        FTPClient ftpClient = new FTPClient();
+        String address = String.valueOf(EditTextNetworkAddress.getText());
+        String account = String.valueOf(EditTextNetworkAccount.getText());
+        String password = String.valueOf(EditTextNetworkPassword.getText());
+
+        //connection
+        Log.i("FTP", address);
+        ftpClient.connect(InetAddress.getByName(address), 21);
+        ftpClient.login(account, password);
+        ftpClient.changeWorkingDirectory("/");
+        ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+        //send file
+        FileInputStream stream = new FileInputStream(this.createFile(filename));
+        BufferedInputStream buff = new BufferedInputStream(stream);
+        //ftpClient.enterLocalPassiveMode();
+        ftpClient.storeFile(filename, buff);
+
+        //disconnection
+        buff.close();
+        ftpClient.logout();
+        ftpClient.disconnect();
+    }
+
+    //========================================================
+    // Override Keyboard key down/up event
+    //========================================================
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        try
+        {
+            fileStream.write(String.format("%s, Touch\n", getTimestamp()).getBytes());
+            Log.i("Writing", data);
+        }
+        catch (Exception  e)
+        {
+            Log.d("Exception", e.getMessage());
+        }
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -281,7 +324,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onClick(View v) {
                 // Process file
                 filename = getFilename();
-                createFileStream(filename);
+                try {
+                    createFileStream(filename);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 // Process UI
                 TextViewFilename.setText(filename);
                 ButtonSaveStart.setEnabled(false);
@@ -294,6 +341,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Timer for End Save-file
         ButtonSaveEnd.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             public void onClick(View v) {
                 // Process file
                 removeFileStream();
@@ -303,6 +351,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 ButtonSaveEnd.setEnabled(false);
                 // Process handler
                 saveHandler.removeCallbacks(saveRunnable);
+                //use network?
+                if(CheckBoxNetworkUsed.isChecked())
+                {
+                    Thread thread = new Thread(){
+                        public void run(){
+                            try {
+                                ftpSend(filename);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    thread.start();
+                }
             }
         });
     }
@@ -376,5 +438,4 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {}
-
 }
